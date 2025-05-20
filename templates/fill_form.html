@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill and Sign PDF</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background-color: #f4f4f4; }
+        .container { background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
+        h1 { color: #333; text-align: center; margin-bottom: 30px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin-top: 20px;
+            width: 100%;
+        }
+        input[type="submit"]:hover { background-color: #218838; }
+        .no-fields { text-align: center; color: #777; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fill and Sign Your Document: {{ filename }}</h1>
+        <form action="/fill_and_sign/{{ filename }}" method="post">
+            {% if form_fields %}
+                <p>Fill in the available form fields:</p>
+                {% for field_name, field_value in form_fields.items() %}
+                    <div class="form-group">
+                        <label for="{{ field_name }}">{{ field_name.replace('_', ' ').title() }}:</label>
+                        <input type="text" id="{{ field_name }}" name="{{ field_name }}" value="{{ field_value }}">
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-fields">No editable form fields detected in this PDF. You can still add a simple text signature.</p>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="signature_text">Your Text Signature:</label>
+                <input type="text" id="signature_text" name="signature_text" placeholder="Type your name or signature here">
+            </div>
+
+            <input type="submit" value="Fill and Sign PDF">
+        </form>
+    </div>
+</body>
+</html>
